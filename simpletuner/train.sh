@@ -7,7 +7,7 @@ if [ -f "../config/config.env" ] && [ -f "train.py" ]; then
 fi
 
 # Pull config from config.env
-[ -f "config/config.env" ] && source config/config.env
+[ -f "/data/config/config.env" ] && source /data/config/config.env
 
 # If the user has not provided VENV_PATH, we will assume $(pwd)/.venv
 if [ -z "${VENV_PATH}" ]; then
@@ -130,14 +130,14 @@ if [[ -z "${ACCELERATE_CONFIG_PATH}" ]]; then
         ACCELERATE_CONFIG_PATH="${HOME}/.cache/huggingface/accelerate/default_config.yaml"
     fi
 fi
+
 # Run the training script.
-if [ -f "${ACCELERATE_CONFIG_PATH}" ]; then
+if [ -f "${ACCELERATE_CONFIG_PATH}" ] && [ -f "${DEEPSPEED_CONFIG_PATH}" ]; then
     echo "Using Accelerate config file: ${ACCELERATE_CONFIG_PATH}"
     accelerate launch --config_file="${ACCELERATE_CONFIG_PATH}" simpletuner/train.py
 else
     echo "Accelerate config file not found: ${ACCELERATE_CONFIG_PATH}. Using values from config.env."
     accelerate launch ${ACCELERATE_EXTRA_ARGS} --mixed_precision="${MIXED_PRECISION}" --num_processes="${TRAINING_NUM_PROCESSES}" --num_machines="${TRAINING_NUM_MACHINES}" --dynamo_backend="${TRAINING_DYNAMO_BACKEND}" simpletuner/train.py
-
 fi
 
 exit 0
