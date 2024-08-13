@@ -78,3 +78,6 @@ test-folder/
 node_modules
 package-lock.json
 **/config
+
+# Docker data volume
+data/

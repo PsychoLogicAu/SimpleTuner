@@ -108,3 +108,6 @@ test-folder/
 node_modules
 package-lock.json
 **/config
+
+# Ignore the data directory, which will be mounted externally
+data/

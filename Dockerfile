@@ -1,5 +1,5 @@
-# SimpleTuner needs CU141
-FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
+# Stage 1: Base Image Setup
+FROM nvidia/cuda:12.9.1-cudnn-devel-ubuntu22.04 AS base
 
 ARG PYTHON_VERSION=3.12
 
@@ -44,6 +44,9 @@ RUN apt-get update -y && \
         zip && \
     rm -rf /var/lib/apt/lists/*
 
+# Stage 2: Dependency Installation and Application Setup
+FROM base AS final
+
 # Configure git to support LFS and credential storage
 RUN git config --global credential.helper store && \
     git lfs install
@@ -59,8 +62,12 @@ ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
 # Ensure SSH access. Not needed for Runpod but is required on Vast and other Docker hosts
 EXPOSE 22/tcp
 
+# Copy the current checkout
+COPY . SimpleTuner
+
 # HuggingFace cache location and platform hint for setup.py
-ENV HF_HOME=/workspace/huggingface
+ARG HF_HOME=/data/cache/huggingface
+ENV HF_HOME=${HF_HOME}
 ENV SIMPLETUNER_PLATFORM=cuda
 
 # Install supporting CLIs ahead of the project install
@@ -69,11 +76,12 @@ RUN pip install --no-cache-dir "huggingface_hub[cli]" wandb
 # Install MPI bindings needed for CUDA multi-node support
 RUN pip install --no-cache-dir mpi4py
 
-# Install SimpleTuner from PyPI to match published releases
-RUN pip install --no-cache-dir simpletuner
+# Install SimpleTuner
+RUN pip install --no-cache-dir /workspace/SimpleTuner
 
 # Copy start script with exec permissions
-COPY --chmod=755 docker-start.sh /start.sh
+COPY --chmod=755 local-start.sh /start.sh
+# COPY --chmod=755 webui-start.sh /start.sh
 
 # Ensure we remain in the default workspace location
 WORKDIR /workspace
