@@ -80,3 +80,6 @@ package-lock.json
 **/config
 site/
 tunableop_results*.csv
+
+# Docker data volume
+data/
