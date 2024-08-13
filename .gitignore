@@ -62,3 +62,6 @@ webhooks.json
 untracked/
 config/*/
 config/*.toml
+
+# Docker data volume
+data/
