@@ -1,5 +1,5 @@
-# SimpleTuner needs CU141
-FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
+# Stage 1: Base Image Setup
+FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04 AS base
 
 ARG PYTHON_VERSION=3.11
 
@@ -8,6 +8,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # /workspace is the default volume for Runpod & other hosts
 WORKDIR /workspace
+
+# libglib2.0-0 
 
 # Base system dependencies (including Python ${PYTHON_VERSION} toolchain)
 RUN apt-get update -y && \
@@ -44,6 +46,9 @@ RUN apt-get update -y && \
         zip && \
     rm -rf /var/lib/apt/lists/*
 
+# Stage 2: Dependency Installation and Application Setup
+FROM base AS final
+
 # Configure git to support LFS and credential storage
 RUN git config --global credential.helper store && \
     git lfs install
@@ -60,7 +65,8 @@ ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
 EXPOSE 22/tcp
 
 # HuggingFace cache location and platform hint for setup.py
-ENV HF_HOME=/workspace/huggingface
+ARG HF_HOME=/workspace/huggingface
+ENV HF_HOME=${HF_HOME}
 ENV SIMPLETUNER_PLATFORM=cuda
 
 # Install supporting CLIs ahead of the project install
@@ -73,10 +79,15 @@ RUN pip install --no-cache-dir mpi4py
 RUN pip install --no-cache-dir simpletuner
 
 # Copy start script with exec permissions
-COPY --chmod=755 docker-start.sh /start.sh
+COPY --chmod=755 local-start.sh /start.sh
 
 # Ensure we remain in the default workspace location
 WORKDIR /workspace
 
+RUN echo "source SimpleTuner/.venv/bin/activate" > activate.sh && chmod +x activate.sh
+
 # Dummy entrypoint
-ENTRYPOINT [ "/start.sh" ]
+# ENTRYPOINT [ "/start.sh" ]
+
+# Set entrypoint to activate the virtual environment and start an interactive shell
+ENTRYPOINT ["/bin/bash", "-c", "source /workspace/SimpleTuner/.venv/bin/activate && exec /bin/bash"]
