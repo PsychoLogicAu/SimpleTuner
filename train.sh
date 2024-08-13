@@ -3,7 +3,7 @@
 # Pull the default config.
 [ -f "config/config.env.example" ] && source config/config.env.example
 # Pull config from config.env
-[ -f "config/config.env" ] && source config/config.env
+[ -f "/data/config/config.env" ] && source /data/config/config.env
 
 # If the user has not provided VENV_PATH, we will assume $(pwd)/.venv
 if [ -z "${VENV_PATH}" ]; then

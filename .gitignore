@@ -60,3 +60,6 @@ vendor/
 inference/
 webhooks.json
 untracked/
+
+# Docker data volume
+data/
