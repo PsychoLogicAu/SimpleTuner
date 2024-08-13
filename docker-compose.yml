@@ -19,7 +19,9 @@ services:
       - ./datasets:/workspace/simpletuner/datasets
       - ./output:/workspace/simpletuner/output
       # Cache models to host machine to avoid re-downloading
-      - ~/.cache/huggingface:/workspace/huggingface
+      # - ~/.cache/huggingface:/workspace/huggingface
+      - "./data:/data"
+      - "./data/huggingface:/workspace/huggingface"
     ports:
       - "8001:8001" # WebUI
       - "2222:22"   # SSH

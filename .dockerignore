@@ -113,3 +113,8 @@ package-lock.json
 
 # Catch any multidatabackend files anywhere
 **/multidatabackend*
+
+#**/config
+
+# Ignore the data directory, which will be mounted externally
+data/
