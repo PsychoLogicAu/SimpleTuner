@@ -40,7 +40,14 @@ else
 	echo "WANDB_API_KEY or WANDB_TOKEN not set; skipping login"
 fi
 
-# Start SimpleTuner Server
-echo "Starting SimpleTuner Server..."
-# We bind to 0.0.0.0 to be accessible outside the container
-simpletuner server --host 0.0.0.0 --port 8001
+# # Start SimpleTuner Server
+# echo "Starting SimpleTuner Server..."
+# # We bind to 0.0.0.0 to be accessible outside the container
+# simpletuner server --host 0.0.0.0 --port 8001
+
+cd /app/SimpleTuner
+
+echo "Link training config file to config/config.json, then"
+echo "$ env ENV=default CONFIG_BACKEND=env SIMPLETUNER_LOG_LEVEL=DEBUG bash simpletuner/train.sh"
+
+exec /usr/bin/bash
