@@ -65,3 +65,6 @@ config/*.toml
 static
 templates
 api_state.json
+
+# Docker data volume
+data/

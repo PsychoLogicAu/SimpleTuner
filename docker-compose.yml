@@ -1,0 +1,23 @@
+services:
+
+  simpletuner:
+    init: true
+    container_name: simpletuner
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: /bin/bash
+    command: [ "-c", "exec /bin/bash" ]
+    stdin_open: true
+    tty: true
+    volumes:
+      - "./data:/data"
+    security_opt:
+      - "label=type:nvidia_container_t"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: [ '0' ]
+              capabilities: [ gpu ]
