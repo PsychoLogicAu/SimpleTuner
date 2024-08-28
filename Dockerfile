@@ -37,7 +37,8 @@ RUN apt-get install -y --no-install-recommends openssh-server \
                                                htop \
                                                inotify-tools \
                                                libgl1-mesa-glx \
-                                               libglib2.0-0
+                                               libglib2.0-0 \
+                                               libaio-dev
 
 # Set up git to support LFS, and to store credentials; useful for Huggingface Hub
 RUN git config --global credential.helper store && \
@@ -65,8 +66,10 @@ RUN pip3 install "huggingface_hub[cli]"
 RUN pip3 install wandb
 
 # Clone SimpleTuner
-RUN git clone https://github.com/bghira/SimpleTuner --branch release
+# RUN git clone https://github.com/bghira/SimpleTuner --branch release
 # RUN git clone https://github.com/bghira/SimpleTuner --branch main # Uncomment to use latest (possibly unstable) version
+RUN git clone https://github.com/PsychoLogicAu/SimpleTuner --branch feature/docker-compose
+
 
 # Install SimpleTuner
 RUN pip3 install poetry
@@ -79,4 +82,7 @@ COPY --chmod=755 local-start.sh /start.sh
 RUN echo "source SimpleTuner/.venv/bin/activate" > activate.sh && chmod +x activate.sh
 
 # Set entrypoint to activate the virtual environment and start an interactive shell
-ENTRYPOINT ["/bin/bash", "-c", "source /workspace/SimpleTuner/.venv/bin/activate && exec /bin/bash"]
+# ENTRYPOINT ["/bin/bash", "-c", "source /workspace/SimpleTuner/.venv/bin/activate && exec /bin/bash"]
+
+# Dummy entrypoint
+ENTRYPOINT [ "/start.sh" ]
