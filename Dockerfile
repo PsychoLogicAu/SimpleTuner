@@ -64,6 +64,11 @@ ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
 # Ensure SSH access. Not needed for Runpod but is required on Vast and other Docker hosts
 EXPOSE 22/tcp
 
+# Clone SimpleTuner
+# RUN git clone https://github.com/bghira/SimpleTuner --branch release
+# RUN git clone https://github.com/bghira/SimpleTuner --branch main # Uncomment to use latest (possibly unstable) version
+RUN git clone https://github.com/PsychoLogicAu/SimpleTuner --branch feature/docker-compose
+
 # HuggingFace cache location and platform hint for setup.py
 ARG HF_HOME=/workspace/huggingface
 ENV HF_HOME=${HF_HOME}
@@ -90,4 +95,7 @@ RUN echo "source SimpleTuner/.venv/bin/activate" > activate.sh && chmod +x activ
 # ENTRYPOINT [ "/start.sh" ]
 
 # Set entrypoint to activate the virtual environment and start an interactive shell
-ENTRYPOINT ["/bin/bash", "-c", "source /workspace/SimpleTuner/.venv/bin/activate && exec /bin/bash"]
+# ENTRYPOINT ["/bin/bash", "-c", "source /workspace/SimpleTuner/.venv/bin/activate && exec /bin/bash"]
+
+# Dummy entrypoint
+ENTRYPOINT [ "/start.sh" ]
