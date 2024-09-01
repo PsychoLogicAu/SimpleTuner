@@ -62,7 +62,7 @@ RUN pip3 install wandb
 # Clone SimpleTuner
 # RUN git clone https://github.com/bghira/SimpleTuner --branch release
 # RUN git clone https://github.com/bghira/SimpleTuner --branch main # Uncomment to use latest (possibly unstable) version
-RUN git clone https://github.com/PsychoLogicAu/SimpleTuner --branch feature/docker-compose
+RUN git clone https://github.com/PsychoLogicAu/SimpleTuner --branch feature/docker-compose-main
 
 
 # Install SimpleTuner
