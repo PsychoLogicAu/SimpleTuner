@@ -73,10 +73,13 @@ RUN chmod +x SimpleTuner/train.sh
 # Copy start script with exec permissions
 COPY --chmod=755 local-start.sh /start.sh
 
-RUN echo "source SimpleTuner/.venv/bin/activate" > activate.sh && chmod +x activate.sh
+RUN echo "source SimpleTuner/.venv/bin/activate && export HF_HOME='/data/cache/huggingface'" > activate.sh && chmod +x activate.sh
+
+#ENV PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+ENV PYTORCH_CUDA_ALLOC_CONF="garbage_collection_threshold:0.8,max_split_size_mb:128,expandable_segments:True"
 
 # Set entrypoint to activate the virtual environment and start an interactive shell
-# ENTRYPOINT ["/bin/bash", "-c", "source /workspace/SimpleTuner/.venv/bin/activate && exec /bin/bash"]
+ENTRYPOINT ["/bin/bash", "-c", "source SimpleTuner/.venv/bin/activate && /bin/bash -c 'SimpleTuner/train.sh'"]
 
 # Dummy entrypoint
-ENTRYPOINT [ "/start.sh" ]
+# ENTRYPOINT [ "/start.sh" ]
