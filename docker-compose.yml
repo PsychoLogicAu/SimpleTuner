@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     entrypoint: /bin/bash
-    command: [ "-c", "exec /bin/bash" ]
+    # command: [ "-c", "exec /bin/bash" ]
     stdin_open: true
     tty: true
     volumes:
