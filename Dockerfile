@@ -68,13 +68,12 @@ RUN pip3 install wandb
 # Clone SimpleTuner
 # RUN git clone https://github.com/bghira/SimpleTuner --branch release
 # RUN git clone https://github.com/bghira/SimpleTuner --branch main # Uncomment to use latest (possibly unstable) version
-ARG CACHEBUST=1
+ARG CACHEBUST=2
 RUN git clone https://github.com/PsychoLogicAu/SimpleTuner --branch main+docker-compose
 
 
 # Install SimpleTuner
 RUN pip3 install poetry
-ARG CACHEBUST=3
 RUN cd SimpleTuner && python3 -m venv .venv && poetry install --no-root
 RUN chmod +x SimpleTuner/train.sh
 
