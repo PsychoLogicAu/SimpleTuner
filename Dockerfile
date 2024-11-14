@@ -11,10 +11,10 @@ RUN apt-get update -y
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install libg dependencies
-RUN apt install libgl1-mesa-glx -y
-RUN apt-get install 'ffmpeg'\
-    'libsm6'\
-    'libxext6'  -y
+# RUN apt install libgl1-mesa-glx -y
+# RUN apt-get install 'ffmpeg'\
+#     'libsm6'\
+#     'libxext6'  -y
 
 # Install misc unix libraries
 RUN apt-get install -y --no-install-recommends openssh-server \
@@ -74,6 +74,7 @@ RUN git clone https://github.com/PsychoLogicAu/SimpleTuner --branch main+docker-
 
 # Install SimpleTuner
 RUN pip3 install poetry
+ARG CACHEBUST=3
 RUN cd SimpleTuner && python3 -m venv .venv && poetry install --no-root
 RUN chmod +x SimpleTuner/train.sh
 
