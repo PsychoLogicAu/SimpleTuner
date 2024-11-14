@@ -67,6 +67,6 @@ requires = ["poetry-core", "setuptools", "wheel", "torch"]
 build-backend = "poetry.core.masonry.api"
 
 [[tool.poetry.source]]
-priority = "supplemental"
+priority = "explicit"
 name = "pytorch"
 url = "https://download.pytorch.org/whl/cu128"
