@@ -67,7 +67,7 @@ EXPOSE 22/tcp
 # Clone SimpleTuner
 # RUN git clone https://github.com/bghira/SimpleTuner --branch release
 # RUN git clone https://github.com/bghira/SimpleTuner --branch main # Uncomment to use latest (possibly unstable) version
-ARG CACHEBUST=1
+ARG CACHEBUST=2
 RUN git clone https://github.com/PsychoLogicAu/SimpleTuner --branch main+docker-compose
 
 # HuggingFace cache location and platform hint for setup.py
