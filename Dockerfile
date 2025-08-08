@@ -1,5 +1,5 @@
 # Stage 1: Base Image Setup
-FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04 AS base
+FROM nvidia/cuda:12.9.1-cudnn-devel-ubuntu22.04 AS base
 
 ARG PYTHON_VERSION=3.11
 
