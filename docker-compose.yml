@@ -13,6 +13,7 @@ services:
     tty: true
     volumes:
       - "./data:/data"
+      - "./data/huggingface:/workspace/huggingface"
     security_opt:
       - "label=type:nvidia_container_t"
     deploy:
