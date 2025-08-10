@@ -67,11 +67,11 @@ EXPOSE 22/tcp
 # Clone SimpleTuner
 # RUN git clone https://github.com/bghira/SimpleTuner --branch release
 # RUN git clone https://github.com/bghira/SimpleTuner --branch main # Uncomment to use latest (possibly unstable) version
-ARG CACHEBUST=1
+ARG CACHEBUST=2
 RUN git clone https://github.com/PsychoLogicAu/SimpleTuner --branch feature/main+docker-compose
 
 # HuggingFace cache location and platform hint for setup.py
-ARG HF_HOME=/workspace/huggingface
+ARG HF_HOME=/data/cache/huggingface
 ENV HF_HOME=${HF_HOME}
 ENV SIMPLETUNER_PLATFORM=cuda
 
@@ -90,7 +90,7 @@ COPY --chmod=755 local-start.sh /start.sh
 # Ensure we remain in the default workspace location
 WORKDIR /workspace
 
-RUN echo "source SimpleTuner/.venv/bin/activate && export HF_HOME='/data/cache/huggingface'" > activate.sh && chmod +x activate.sh
+RUN echo "source SimpleTuner/.venv/bin/activate" > activate.sh && chmod +x activate.sh
 
 #ENV PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 ENV PYTORCH_CUDA_ALLOC_CONF="garbage_collection_threshold:0.8,max_split_size_mb:128"
