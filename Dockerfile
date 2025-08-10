@@ -68,7 +68,7 @@ RUN pip3 install wandb
 # Clone SimpleTuner
 # RUN git clone https://github.com/bghira/SimpleTuner --branch release
 # RUN git clone https://github.com/bghira/SimpleTuner --branch main # Uncomment to use latest (possibly unstable) version
-ARG CACHEBUST=1
+ARG CACHEBUST=2
 RUN git clone https://github.com/PsychoLogicAu/SimpleTuner --branch feature/main+docker-compose
 
 
@@ -80,7 +80,7 @@ RUN chmod +x SimpleTuner/train.sh
 # Copy start script with exec permissions
 COPY --chmod=755 local-start.sh /start.sh
 
-RUN echo "source SimpleTuner/.venv/bin/activate && export HF_HOME='/data/cache/huggingface'" > activate.sh && chmod +x activate.sh
+RUN echo "source SimpleTuner/.venv/bin/activate" > activate.sh && chmod +x activate.sh
 
 #ENV PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 ENV PYTORCH_CUDA_ALLOC_CONF="garbage_collection_threshold:0.8,max_split_size_mb:128"
@@ -89,7 +89,7 @@ ENV PYTORCH_CUDA_ALLOC_CONF="garbage_collection_threshold:0.8,max_split_size_mb:
 # ENTRYPOINT ["/bin/bash", "-c", "source SimpleTuner/.venv/bin/activate && /bin/bash -c 'SimpleTuner/train.sh'"]
 
 COPY --chmod=755 entry.sh /entry.sh
-ENTRYPOINT ["/entry.sh"]
+ENTRYPOINT ["/entry.sh bash"]
 
 # Dummy entrypoint
 # ENTRYPOINT [ "/start.sh" ]
