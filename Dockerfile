@@ -68,7 +68,7 @@ RUN pip3 install wandb
 # Clone SimpleTuner
 # RUN git clone https://github.com/bghira/SimpleTuner --branch release
 # RUN git clone https://github.com/bghira/SimpleTuner --branch main # Uncomment to use latest (possibly unstable) version
-ARG CACHEBUST=2
+ARG CACHEBUST=3
 RUN git clone https://github.com/PsychoLogicAu/SimpleTuner --branch feature/main+docker-compose
 
 
@@ -89,7 +89,7 @@ ENV PYTORCH_CUDA_ALLOC_CONF="garbage_collection_threshold:0.8,max_split_size_mb:
 # ENTRYPOINT ["/bin/bash", "-c", "source SimpleTuner/.venv/bin/activate && /bin/bash -c 'SimpleTuner/train.sh'"]
 
 COPY --chmod=755 entry.sh /entry.sh
-ENTRYPOINT ["/entry.sh bash"]
+ENTRYPOINT ["/entry.sh"]
 
 # Dummy entrypoint
 # ENTRYPOINT [ "/start.sh" ]
