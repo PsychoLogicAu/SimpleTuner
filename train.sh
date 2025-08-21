@@ -114,14 +114,44 @@ if [[ -z "${ACCELERATE_CONFIG_PATH}" ]]; then
         ACCELERATE_CONFIG_PATH="${HOME}/.cache/huggingface/accelerate/default_config.yaml"
     fi
 fi
+
+MAX_RETRIES=100
+RETRY_COUNT=0
+
 # Run the training script.
 if [ -f "${ACCELERATE_CONFIG_PATH}" ]; then
     echo "Using Accelerate config file: ${ACCELERATE_CONFIG_PATH}"
-    accelerate launch --config_file="${ACCELERATE_CONFIG_PATH}" train.py
+    until accelerate launch --config_file="${ACCELERATE_CONFIG_PATH}" train.py; do
+        EXIT_CODE=$?
+        if [ $EXIT_CODE -eq 139 ] || [ $EXIT_CODE -eq 11 ]; then
+            RETRY_COUNT=$((RETRY_COUNT+1))
+            echo "Training crashed with SIGSEGV (exit code $EXIT_CODE). Retry $RETRY_COUNT/$MAX_RETRIES..."
+            [ $RETRY_COUNT -ge $MAX_RETRIES ] && exit $EXIT_CODE
+            sleep 2
+        else
+            echo "Training failed with exit code $EXIT_CODE. Exiting."
+            exit $EXIT_CODE
+        fi
+    done
 else
     echo "Accelerate config file not found: ${ACCELERATE_CONFIG_PATH}. Using values from config.env."
-    accelerate launch ${ACCELERATE_EXTRA_ARGS} --mixed_precision="${MIXED_PRECISION}" --num_processes="${TRAINING_NUM_PROCESSES}" --num_machines="${TRAINING_NUM_MACHINES}" --dynamo_backend="${TRAINING_DYNAMO_BACKEND}" train.py
-
+    until accelerate launch ${ACCELERATE_EXTRA_ARGS} \
+        --mixed_precision="${MIXED_PRECISION}" \
+        --num_processes="${TRAINING_NUM_PROCESSES}" \
+        --num_machines="${TRAINING_NUM_MACHINES}" \
+        --dynamo_backend="${TRAINING_DYNAMO_BACKEND}" \
+        train.py; do
+        EXIT_CODE=$?
+        if [ $EXIT_CODE -eq 139 ] || [ $EXIT_CODE -eq 11 ]; then
+            RETRY_COUNT=$((RETRY_COUNT+1))
+            echo "Training crashed with SIGSEGV (exit code $EXIT_CODE). Retry $RETRY_COUNT/$MAX_RETRIES..."
+            [ $RETRY_COUNT -ge $MAX_RETRIES ] && exit $EXIT_CODE
+            sleep 2
+        else
+            echo "Training failed with exit code $EXIT_CODE. Exiting."
+            exit $EXIT_CODE
+        fi
+    done
 fi
 
 exit 0
