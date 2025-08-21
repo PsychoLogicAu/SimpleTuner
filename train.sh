@@ -115,13 +115,23 @@ if [[ -z "${ACCELERATE_CONFIG_PATH}" ]]; then
     fi
 fi
 
+if [[ -z "${DEEPSPEED_CONFIG_PATH}" ]]; then
+    # Look for deepspeed config in HF_HOME first, otherwise fallback to $HOME
+    if [[ -f "${HF_HOME}/accelerate/ds_config.yaml" ]]; then
+        DEEPSPEED_CONFIG_PATH="${HF_HOME}/accelerate/ds_config.yaml"
+    else
+        DEEPSPEED_CONFIG_PATH="${HOME}/.cache/huggingface/accelerate/ds_config.yaml"
+    fi
+fi
+
 MAX_RETRIES=100
 RETRY_COUNT=0
 
 # Run the training script.
-if [ -f "${ACCELERATE_CONFIG_PATH}" ]; then
+if [ -f "${ACCELERATE_CONFIG_PATH}" ] && [ -f "${DEEPSPEED_CONFIG_PATH}" ]; then
     echo "Using Accelerate config file: ${ACCELERATE_CONFIG_PATH}"
-    until accelerate launch --config_file="${ACCELERATE_CONFIG_PATH}" train.py; do
+    echo "Using DeepSpeed config file: ${DEEPSPEED_CONFIG_PATH}"
+    until accelerate launch --config_file="${ACCELERATE_CONFIG_PATH}" --deepspeed "${DEEPSPEED_CONFIG_PATH}" train.py; do
         EXIT_CODE=$?
         if [ $EXIT_CODE -eq 139 ] || [ $EXIT_CODE -eq 11 ]; then
             RETRY_COUNT=$((RETRY_COUNT+1))
