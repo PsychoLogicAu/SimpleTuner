@@ -132,7 +132,7 @@ if [[ -z "${ACCELERATE_CONFIG_PATH}" ]]; then
 fi
 
 # Run the training script.
-if [ -f "${ACCELERATE_CONFIG_PATH}" ]; then
+if [ -f "${ACCELERATE_CONFIG_PATH}" ] && [ -f "${DEEPSPEED_CONFIG_PATH}" ]; then
     echo "Using Accelerate config file: ${ACCELERATE_CONFIG_PATH}"
     accelerate launch --config_file="${ACCELERATE_CONFIG_PATH}" simpletuner/train.py
 else
