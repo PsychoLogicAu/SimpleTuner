@@ -131,9 +131,6 @@ if [[ -z "${ACCELERATE_CONFIG_PATH}" ]]; then
     fi
 fi
 
-MAX_RETRIES=100
-RETRY_COUNT=0
-
 # Run the training script.
 if [ -f "${ACCELERATE_CONFIG_PATH}" ]; then
     echo "Using Accelerate config file: ${ACCELERATE_CONFIG_PATH}"
