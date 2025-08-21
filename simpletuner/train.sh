@@ -130,6 +130,10 @@ if [[ -z "${ACCELERATE_CONFIG_PATH}" ]]; then
         ACCELERATE_CONFIG_PATH="${HOME}/.cache/huggingface/accelerate/default_config.yaml"
     fi
 fi
+
+MAX_RETRIES=100
+RETRY_COUNT=0
+
 # Run the training script.
 if [ -f "${ACCELERATE_CONFIG_PATH}" ]; then
     echo "Using Accelerate config file: ${ACCELERATE_CONFIG_PATH}"
@@ -137,7 +141,6 @@ if [ -f "${ACCELERATE_CONFIG_PATH}" ]; then
 else
     echo "Accelerate config file not found: ${ACCELERATE_CONFIG_PATH}. Using values from config.env."
     accelerate launch ${ACCELERATE_EXTRA_ARGS} --mixed_precision="${MIXED_PRECISION}" --num_processes="${TRAINING_NUM_PROCESSES}" --num_machines="${TRAINING_NUM_MACHINES}" --dynamo_backend="${TRAINING_DYNAMO_BACKEND}" simpletuner/train.py
-
 fi
 
 exit 0
