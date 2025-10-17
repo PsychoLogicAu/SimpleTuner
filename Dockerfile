@@ -65,10 +65,7 @@ ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
 EXPOSE 22/tcp
 
 # Clone SimpleTuner
-# RUN git clone https://github.com/bghira/SimpleTuner --branch release
-# RUN git clone https://github.com/bghira/SimpleTuner --branch main # Uncomment to use latest (possibly unstable) version
-ARG CACHEBUST=4
-RUN git clone https://github.com/PsychoLogicAu/SimpleTuner --branch feature/main+docker-compose
+RUN git clone https://github.com/PsychoLogicAu/SimpleTuner --branch feature/v3.0.0+docker-compose
 
 # HuggingFace cache location and platform hint for setup.py
 ARG HF_HOME=/data/cache/huggingface
