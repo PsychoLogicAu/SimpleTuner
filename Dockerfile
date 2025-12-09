@@ -62,9 +62,6 @@ ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
 # Ensure SSH access. Not needed for Runpod but is required on Vast and other Docker hosts
 EXPOSE 22/tcp
 
-# Copy the current checkout
-COPY . SimpleTuner
-
 # HuggingFace cache location and platform hint for setup.py
 ARG HF_HOME=/data/cache/huggingface
 ENV HF_HOME=${HF_HOME}
@@ -75,6 +72,9 @@ RUN pip install --no-cache-dir "huggingface_hub[cli]" wandb
 
 # Install MPI bindings needed for CUDA multi-node support
 RUN pip install --no-cache-dir mpi4py
+
+# Copy the current checkout
+COPY . SimpleTuner
 
 # Install SimpleTuner
 RUN pip install --no-cache-dir /workspace/SimpleTuner
