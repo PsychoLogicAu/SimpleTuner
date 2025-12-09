@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    # environment:
+    #   - HF_TOKEN=<secret>
     # entrypoint: /bin/bash
     # command: [ "-c", "exec /bin/bash" ]
     command: ["bash"]
@@ -14,8 +16,31 @@ services:
     volumes:
       - "./data:/data"
       - "./data/huggingface:/workspace/huggingface"
-    ports:
-      - "8080:8080"
+    network_mode: "host"
+    # ports:
+    #   - "8080:8080"
+    security_opt:
+      - "label=type:nvidia_container_t"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: [ '0' ]
+              capabilities: [ gpu ]
+
+  simpletuner_working:
+    init: true
+    container_name: simpletuner_working
+    image: simpletuner-working:latest
+    # environment:
+    #   - HF_TOKEN=<secret>
+    command: ["bash"]
+    stdin_open: true
+    tty: true
+    volumes:
+      - "./data:/data"
+      - "./data/huggingface:/workspace/huggingface"
     security_opt:
       - "label=type:nvidia_container_t"
     deploy:
