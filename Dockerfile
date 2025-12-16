@@ -1,8 +1,9 @@
-FROM nvidia/cuda:12.8.1-cudnn-devel-ubuntu24.04
+# Stage 1: Base Image Setup
+FROM nvidia/cuda:13.0.2-cudnn-devel-ubuntu24.04 AS base
 
 # Hardware Architecture
-ENV TORCH_CUDA_ARCH_LIST=8.9
-ENV CUDA_HOME=/usr/local/cuda-12.8
+ENV TORCH_CUDA_ARCH_LIST=12.0
+ENV CUDA_HOME=/usr/local/cuda-13.0
 ENV LD_LIBRARY_PATH=$CUDA_HOME/lib64:$CUDA_HOME/targets/x86_64-linux/lib/stubs:$LD_LIBRARY_PATH
 
 # Settings
