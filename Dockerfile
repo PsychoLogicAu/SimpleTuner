@@ -1,5 +1,5 @@
 # Stage 1: Base Image Setup
-FROM nvidia/cuda:12.9.1-cudnn-devel-ubuntu22.04 AS base
+FROM nvidia/cuda:13.0.2-cudnn-devel-ubuntu24.04 AS base
 
 ARG PYTHON_VERSION=3.12
 
@@ -22,7 +22,6 @@ RUN apt-get update -y && \
         inotify-tools \
         iputils-ping \
         less \
-        libgl1-mesa-glx \
         libsm6 \
         libxext6 \
         libopenmpi-dev \
