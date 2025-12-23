@@ -35,7 +35,7 @@ output/
 temp/
 env.sh
 *.pem
-*/config/config.json
+/config/config.json
 user_prompt_library.json
 __pycache__/
 .venv/
@@ -76,45 +76,44 @@ venv/
 Thumbs.db
 
 files.tbz
-*/config/auth.json
+/config/auth.json
 work
 multidatabackend.json
 multidatabackend_sd2x.json
 
-config/*.json
-config/*.env
-wandb/
-cache/
-vae_cache/
-vendor/
-inference/
-webhooks.json
-untracked/
-config/*/
-config/*.toml
-api_state.json
-images/
-datasets/
-.test_runner_state
-.test_runner_state.json
-.coverage
-coverage.xml
-*/htmlcov
-.simpletuner_output
-.mypy_cache
-.ruff_cache
-test-screenshots/
-test-folder/
-node_modules
-package-lock.json
+# config/*.json
+# config/*.env
+# wandb/
+# cache/
+# vae_cache/
+# vendor/
+# inference/
+# webhooks.json
+# untracked/
+# config/*/
+# config/*.toml
+# api_state.json
+# images/
+# datasets/
+# .test_runner_state
+# .test_runner_state.json
+# .coverage
+# coverage.xml
+# */htmlcov
+# .simpletuner_output
+# .mypy_cache
+# .ruff_cache
+# test-screenshots/
+# test-folder/
+# node_modules
+# package-lock.json
 # Exclude the root config directory entirely (contains user credentials)
-/config/
-/config/**
+# /config/
+# /config/**
 
 # Catch any multidatabackend files anywhere
-**/multidatabackend*
-
-#**/config
+# **/multidatabackend*
+# **/config
 
 # Ignore the data directory, which will be mounted externally
-data/
+/data/
