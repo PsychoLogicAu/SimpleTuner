@@ -33,6 +33,7 @@ services:
       - GIT_REPOSITORY=${GIT_REPOSITORY}
       - TRAINING_NAME=${TRAINING_NAME}
       - USE_SSL=${USE_SSL:-false}
+      - PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
     shm_size: 16gb
     tty: true
     stdin_open: true
